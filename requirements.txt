@@ -1,0 +1,17 @@
+langchain
+langchain-community
+langchain-ollama
+langchain_chroma
+langchain_nomic
+langgraph
+tiktoken
+nomic[local]
+bs4
+scikit-learn 
+beautifulsoup4
+fastapi
+uvicorn
+python-dotenv
+jinja2
+ipython
+duckduckgo-search

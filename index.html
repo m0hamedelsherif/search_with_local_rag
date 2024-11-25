@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Advanced Research Assistant</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 40px;
+        background-color: #f5f5f5;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      input[type="text"] {
+        width: 80%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 16px;
+      }
+      button {
+        padding: 12px 24px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+      .result {
+        margin-top: 20px;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+      .queries {
+        margin: 20px 0;
+        padding: 10px;
+        background-color: #f8f9fa;
+        border-radius: 4px;
+      }
+      .loading {
+        display: none;
+        margin: 20px 0;
+        color: #666;
+      }
+      .source {
+        margin-bottom: 10px;
+      }
+      .source a {
+        color: #007bff;
+        text-decoration: none;
+      }
+      .source a:hover {
+        text-decoration: underline;
+      }
+      .source-description {
+        color: #666;
+        font-size: 0.9em;
+        font-style: italic;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Advanced Research Assistant</h1>
+      <div>
+        <input type="text" id="query" placeholder="Enter your research topic" />
+        <button onclick="research()">Research</button>
+      </div>
+      <div id="loading" class="loading">
+        <p>🔄 Generating optimal search queries...</p>
+        <p>🌐 Gathering information from multiple sources...</p>
+        <p>🤖 Analyzing and synthesizing data...</p>
+      </div>
+      <div id="queries" class="queries"></div>
+      <div id="result" class="result"></div>
+    </div>
+    <script>
+      async function research() {
+        const query = document.getElementById("query").value;
+        const loading = document.getElementById("loading");
+        const queriesDiv = document.getElementById("queries");
+        const result = document.getElementById("result");
+
+        loading.style.display = "block";
+        queriesDiv.innerHTML = "";
+        result.innerHTML = "";
+
+        try {
+          const response = await fetch("/research", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ query: query }),
+          });
+          const data = await response.json();
+
+          queriesDiv.innerHTML = `
+                <h3>Search Queries Generated:</h3>
+                <ul>
+                    ${data.queries.map((q) => `<li>${q}</li>`).join("")}
+                </ul>
+            `;
+
+          result.innerHTML = `
+                <h2>Research Summary</h2>
+                <p>${data.summary}</p>
+                <h3>Sources:</h3>
+                <div>
+                    ${data.sources
+                      .map(
+                        (s) => `
+                        <div class="source">
+                            <a href="${s.link}" target="_blank">${s.title}</a>
+                            <div class="source-description">Description: ${s.description}</div>
+                        </div>
+                    `
+                      )
+                      .join("")}
+                </div>
+            `;
+        } catch (error) {
+          result.innerHTML = `Error: ${error.message}`;
+        } finally {
+          loading.style.display = "none";
+        }
+      }
+    </script>
+  </body>
+</html>
