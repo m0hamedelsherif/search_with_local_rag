@@ -80,7 +80,7 @@ def grade_generation_v_documents_and_question(state):
     max_retries = state.get("max_retries", 3)  # Default to 3 if not provided
 
     hallucination_grader_prompt_formatted = hallucination_grader_prompt.format(
-        documents=format_docs(documents), generation=generation.content
+        documents=format_docs(documents), generation=generation
     )
     result = llm_json_mode.invoke(
     [SystemMessage(content=hallucination_grader_instructions)]
@@ -96,7 +96,7 @@ def grade_generation_v_documents_and_question(state):
         print("---GRADE GENERATION vs QUESTION---")
         # Test using question and generation from above
         answer_grader_prompt_formatted = answer_grader_prompt.format(
-            question=question, generation=generation.content
+            question=question, generation=generation
         )
         result = llm_json_mode.invoke(
             [SystemMessage(content=answer_grader_instructions)]

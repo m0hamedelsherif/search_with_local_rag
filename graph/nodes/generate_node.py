@@ -34,7 +34,7 @@ def generate(state):
     rag_prompt_formatted = prompt.format(context=docs_txt, question=question)
     generation = llm.invoke([SystemMessage(content=system_prompt)]
             + [HumanMessage(content=rag_prompt_formatted)])
-    return {"generation": generation, "loop_step": loop_step + 1}
+    return {"generation": generation.content, "loop_step": loop_step + 1}
 
 
 # Post-processing

@@ -15,3 +15,5 @@ python-dotenv
 jinja2
 ipython
 duckduckgo-search
+streamlit
+flask

@@ -38,7 +38,7 @@ def research():
     
     return jsonify({
         'queries': final_state.get('search_queries', []),
-        'summary': final_state["generation"].content,
+        'summary': final_state["generation"],
         'sources': sources
     })
 
