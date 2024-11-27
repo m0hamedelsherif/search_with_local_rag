@@ -8,7 +8,7 @@ def duck_search_and_scrape(queries, num_results=3):
     wrapper = DuckDuckGoSearchAPIWrapper(max_results=num_results)
     search = DuckDuckGoSearchResults(api_wrapper=wrapper,output_format="list")
 
-    for query in queries[:num_results]:
+    for query in queries:
         try:
             search_results = search.invoke(query)
 

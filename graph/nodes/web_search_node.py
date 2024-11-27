@@ -21,21 +21,18 @@ def web_search(state):
     print("---WEB SEARCH---")
 
     question = state["question"]
-    # documents = state.get("documents", [])
 
-    documents = similarity_search(question)
+    documents = state.get('documents',[])
 
     queries = generate_search_queries(question,format_docs(documents))
     print("Search queries:", queries)
-    search_results = duck_search_and_scrape(queries,2)
-    # print("Search results:", search_results)
+    search_results = duck_search_and_scrape(queries[:2],2)
 
     for result in search_results:
         metaData = {"title":result.get('title'),"content":result.get('content'),"link": result.get('link'), "query": result.get('query')}
         print("Web search results:", metaData)
         add_web_documents(result.get('link'),metaData)
 
-    documents = state.get("documents", [])
     search_queries = []
     for query in queries:
         search_queries.append(query)
@@ -44,4 +41,9 @@ def web_search(state):
 
 # Post-processing
 def format_docs(docs):
+    """Format documents for Ollama input
+        Remove
+    Args:
+        docs (list): List of Document objects
+    """
     return "\n\n".join(doc.page_content for doc in docs)

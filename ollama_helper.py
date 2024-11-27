@@ -19,12 +19,13 @@ def generate_search_queries(topic, context=""):
         prompt += f"\n\nContext:\n{context}"
     
     response = llm_json_mode.invoke(prompt, system_prompt=system_prompt)
-
-    print("Response:", response)
-    
-    result = json.loads(response.content)['queries']
-
-    # return handle_response(response)
+    print("Search Queries Response: ", response.content)
+    result = [topic]
+    try:
+        result = json.loads(response.content)['queries']
+    except Exception as e:
+        print(f"Error decoding JSON: {e}")
+        result = [response.content]
     return result
     
 def create_summary(query, all_content):
@@ -44,11 +45,7 @@ def create_summary(query, all_content):
     
     # Get summary from Ollama
     response = llm.invoke(prompt, system_prompt=system_prompt)
-    # response = response.strip()
-    # print("Response:", response)
 
-    # summary = json.loads(response.content.strip())
-    # print("Summary:", summary)
     return response.content.strip()
 
 def handle_response(response):

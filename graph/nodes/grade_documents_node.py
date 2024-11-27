@@ -34,7 +34,15 @@ def grade_documents(state):
 
     # Score each doc
     filtered_docs = []
-    web_search = "No"
+    web_search = state.get("web_search", "No")
+    transform_query = state.get("transform_query", "No")
+    if not documents and web_search == "Yes":
+        web_search = "No"
+        transform_query = "Yes"
+        return {"documents": documents, "web_search": web_search, "transform_query": transform_query}
+    else :
+        transform_query = "No"
+
     for d in documents:
         print("doc:", d.page_content)
         doc_grader_prompt_formatted = doc_grader_prompt.format(
@@ -55,6 +63,8 @@ def grade_documents(state):
             print("---GRADE: DOCUMENT NOT RELEVANT---")
             # We do not include the document in filtered_docs
             # We set a flag to indicate that we want to run web search
-            # web_search = "Yes"
             continue
-    return {"documents": filtered_docs, "web_search": web_search}
+        
+    if not filtered_docs:
+        web_search = "Yes"
+    return {"documents": filtered_docs, "web_search": web_search, "transform_query": transform_query}

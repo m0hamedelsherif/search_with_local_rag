@@ -10,9 +10,13 @@ def decide_to_generate(state):
     """
 
     print("---ASSESS GRADED DOCUMENTS---")
-    question = state["question"]
     web_search = state["web_search"]
-    filtered_documents = state["documents"]
+    transform_query = state["transform_query"]
+
+    if transform_query == "Yes":
+        # We will re-generate a new query
+        print("---DECISION: TRANSFORM QUERY---")
+        return "transformquery"
 
     if web_search == "Yes":
         # All documents have been filtered check_relevance

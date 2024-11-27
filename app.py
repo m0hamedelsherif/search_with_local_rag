@@ -16,7 +16,7 @@ def research():
     if not query:
         return jsonify({'error': 'Query is required'}), 400
 
-    # check if the query contains links and scrape the links contenx before generating search queries for better context and extract them
+    # check if the query contains links and scrape the links context before generating search queries for better context and extract them
     build_context(query)
 
     # Test on current events
@@ -37,7 +37,7 @@ def research():
     } for doc in documents]
     
     return jsonify({
-        'queries': final_state["search_queries"],
+        'queries': final_state.get('search_queries', []),
         'summary': final_state["generation"].content,
         'sources': sources
     })

@@ -11,6 +11,7 @@ class GraphState(TypedDict):
     question: str  # User question
     generation: str  # LLM generation
     web_search: str  # Binary decision to run web search
+    transform_query: str  # Binary decision to transform query
     search_queries: List[str] = []  # List of search queries
     max_retries: int  # Max number of retries for answer generation
     answers: int  # Number of answers generated

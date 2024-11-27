@@ -16,6 +16,19 @@ def generate(state):
     documents = state["documents"]
     loop_step = state.get("loop_step", 0)
 
+    system_prompt = """You are a research synthesis expert. Your task is to:
+    1. Analyze the provided source materials
+    2. Synthesize the information into a coherent Answer/Summary
+    3. Focus on key findings and insights
+    4. Maintain objectivity and accuracy
+    5. Highlight any conflicting information or perspectives"""
+
+    prompt = """Based on the following sources, provide a comprehensive Answer/Summary of the topic: {question} 
+
+    {context}
+
+    Please provide a well-structured Answer/Summary that synthesizes the key information and insights from all sources."""
+
     # RAG generation
     docs_txt = format_docs(documents)
     rag_prompt_formatted = prompt.format(context=docs_txt, question=question)
@@ -23,20 +36,6 @@ def generate(state):
             + [HumanMessage(content=rag_prompt_formatted)])
     return {"generation": generation, "loop_step": loop_step + 1}
 
-### Generate
-
-system_prompt = """You are a research synthesis expert. Your task is to:
-1. Analyze the provided source materials
-2. Synthesize the information into a coherent Answer/Summary
-3. Focus on key findings and insights
-4. Maintain objectivity and accuracy
-5. Highlight any conflicting information or perspectives"""
-
-prompt = """Based on the following sources, provide a comprehensive Answer/Summary of the topic: {question} 
-
-{context}
-
-Please provide a well-structured Answer/Summary that synthesizes the key information and insights from all sources."""
 
 # Post-processing
 def format_docs(docs):
