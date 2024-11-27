@@ -2,8 +2,8 @@
 
 1. Clone the repository:
     ```sh
-    git clone <repository-url>
-    cd <repository-directory>
+    git clone https://github.com/m0hamedelsherif/search_with_local_rag.git
+    cd search_with_local_rag
     ```
 
 2. Create a virtual environment and activate it:
