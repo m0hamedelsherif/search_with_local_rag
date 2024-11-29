@@ -1,4 +1,4 @@
-from ollama_wrapper import llm
+from ollama_wrapper import creativeLLm
 from langchain_core.messages import HumanMessage , SystemMessage
 
 def generate(state):
@@ -32,7 +32,7 @@ def generate(state):
     # RAG generation
     docs_txt = format_docs(documents)
     rag_prompt_formatted = prompt.format(context=docs_txt, question=question)
-    generation = llm.invoke([SystemMessage(content=system_prompt)]
+    generation = creativeLLm.invoke([SystemMessage(content=system_prompt)]
             + [HumanMessage(content=rag_prompt_formatted)])
     return {"generation": generation.content, "loop_step": loop_step + 1}
 

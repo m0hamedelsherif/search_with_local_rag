@@ -28,7 +28,6 @@ def research():
     final_state = graph.invoke(inputs)
 
     documents = final_state.get('documents',[])
-    print(f"Documents: {documents}")  # Debug print
     # Prepare sources list
     sources = [{
         'title': doc.metadata['title'],

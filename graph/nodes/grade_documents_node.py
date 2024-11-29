@@ -67,4 +67,6 @@ def grade_documents(state):
         
     if not filtered_docs:
         web_search = "Yes"
+    else:
+        web_search = "No"
     return {"documents": filtered_docs, "web_search": web_search, "transform_query": transform_query}
