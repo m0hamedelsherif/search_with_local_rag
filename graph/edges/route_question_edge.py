@@ -7,7 +7,7 @@ import json
 
 def route_question(state):
     """
-    Route question to web search or RAG
+    Route question to simple generation or RAG
 
     Args:
         state (dict): The current graph state
@@ -21,18 +21,14 @@ def route_question(state):
         [SystemMessage(content=router_instructions)]
         + [HumanMessage(content=state["question"])]
     )
+    print(f"Route Question: {json.loads(route_question.content)}")
     source = json.loads(route_question.content)["datasource"]
-    if source == "websearch":
-        print("---ROUTE QUESTION TO WEB SEARCH---")
-        return "websearch"
-    elif source == "vectorstore":
-        print("---ROUTE QUESTION TO RAG---")
-        return "vectorstore"
+    print(f"Source: {source}")
+    return source.lower()
     
-router_instructions = """You are an expert at routing a user question to a vectorstore or web search.
+router_instructions = """You are an expert at routing a user question to a RAG System that will have web search capabilities .
 
-The vectorstore contains documents related to halaal crypto, and the web search tool can search the web for any topic.
+use the simple approach for general prompts that do not require a deep dive into the documents or the web.
+Use the RAG especially for current events or for when you doesn't have enough information to generate answer.
 
-Use the vectorstore for questions on these topics. For all else, and especially for current events, use web-search.
-
-Return JSON with single key, datasource, that is 'websearch' or 'vectorstore' depending on the question."""
+Must always Return JSON with single key, datasource, that is 'RAG' or 'Simple' depending on the question. """

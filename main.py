@@ -16,9 +16,6 @@ def build_context(query):
 if "chat_history" not in st.session_state:
     st.session_state["chat_history"] = []
 
-# Streamlit application layout
-st.title("Chat with Llama")
-
 chat_placeholder = st.empty()
 
 # Display chat history
@@ -27,31 +24,14 @@ def render_chat():
         for chat in st.session_state["chat_history"]:
             st.markdown(f"**You:** {chat['user']}")
             st.markdown(f"**Llama:** {chat['llama']}")
-            if "sources" in chat:
+            if "sources" in chat and len(chat["sources"]) > 0:
                 st.markdown("**Sources:**")
                 for source in chat["sources"]:
                     st.markdown(f"- [{source['title']}]({source['link']})")
                     if 'description' in source:
                         st.markdown(f"  *{source['description']}*")
 
-# Initial render of chat history
-render_chat()
-
-# User input
-user_input = st.text_area("Your message:", height=100)
-
-# JavaScript to detect Ctrl+Enter and trigger the button click
-st.components.v1.html("""
-<script>
-document.addEventListener('keydown', function(event) {
-    if (event.ctrlKey && event.key === 'Enter') {
-        document.querySelector('button[aria-label="Send"]').click();
-    }
-});
-</script>
-""")
-
-def generate_chat_response(build_context, render_chat, user_input):
+def generate_chat_response(user_input):
     build_context(user_input)
 
     inputs = {
@@ -79,10 +59,27 @@ def generate_chat_response(build_context, render_chat, user_input):
     result["sources"] = sources
     st.session_state["chat_history"].append(result)
 
-if st.button("Send"):
-    if user_input:
+# Streamlit application layout
+st.title("Chat with Llama")
+
+# Initial render of chat history
+render_chat()
+
+# User input and button state
+user_input = st.text_area("Your message:", height=100, key="input_box")
+send_disabled = st.session_state.get("disable_send", False)
+
+# Send button
+if st.button("Send", disabled=send_disabled):
+    if user_input.strip():
         with st.spinner("Llama is thinking..."):
-            generate_chat_response(build_context, render_chat, user_input)
-            render_chat()  # Update chat with final result
+            # Disable button and clear input
+            st.session_state["disable_send"] = True
+            # st.session_state["input_box"]
+            generate_chat_response(user_input)
+            render_chat()
+
+            # Re-enable the button
+            st.session_state["disable_send"] = False
     else:
         st.warning("Please enter a message.")
